@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>What's New in this Release</title>
+  <meta name="GENERATOR" content="Modular DocBook HTML Stylesheet Version 1.79">
+  <link rel="HOME" title="Privoxy 3.0.32 User Manual" href="index.html">
+  <link rel="PREVIOUS" title="Installation" href="installation.html">
+  <link rel="NEXT" title="Quickstart to Using Privoxy" href="quickstart.html">
+  <link rel="STYLESHEET" type="text/css" href="../p_doc.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link rel="STYLESHEET" type="text/css" href="p_doc.css">
+</head>
+<body class="SECT1" bgcolor="#EEEEEE" text="#000000" link="#0000FF" vlink="#840084" alink="#0000FF">
+  <div class="NAVHEADER">
+    <table summary="Header navigation table" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <th colspan="3" align="center">Privoxy 3.0.32 User Manual</th>
+      </tr>
+      <tr>
+        <td width="10%" align="left" valign="bottom"><a href="installation.html" accesskey="P">Prev</a></td>
+        <td width="80%" align="center" valign="bottom"></td>
+        <td width="10%" align="right" valign="bottom"><a href="quickstart.html" accesskey="N">Next</a></td>
+      </tr>
+    </table>
+    <hr align="left" width="100%">
+  </div>
+  <div class="SECT1">
+    <h1 class="SECT1"><a name="WHATSNEW" id="WHATSNEW">3. What's New in this Release</a></h1>
+    <p><span class="APPLICATION">Privoxy 3.0.32</span> fixes multiple DoS issues and a couple of other bugs. The issues
+    also affect earlier Privoxy releases.</p>
+    <p>Changes in <span class="APPLICATION">Privoxy 3.0.32</span> stable:</p>
+    <ul>
+      <li>
+        <p>Security/Reliability:</p>
+        <ul>
+          <li>
+            <p>ssplit(): Remove an assertion that could be triggered with a crafted CGI request. Commit 2256d7b4d67.
+            OVE-20210203-0001. Reported by: Joshua Rogers (Opera)</p>
+          </li>
+          <li>
+            <p>cgi_send_banner(): Overrule invalid image types. Prevents a crash with a crafted CGI request if Privoxy
+            is toggled off. Commit e711c505c48. OVE-20210206-0001. Reported by: Joshua Rogers (Opera)</p>
+          </li>
+          <li>
+            <p>socks5_connect(): Don't try to send credentials when none are configured. Fixes a crash due to a
+            NULL-pointer dereference when the socks server misbehaves. Commit 85817cc55b9. OVE-20210207-0001. Reported
+            by: Joshua Rogers (Opera)</p>
+          </li>
+          <li>
+            <p>chunked_body_is_complete(): Prevent an invalid read of size two. Commit a912ba7bc9c. OVE-20210205-0001.
+            Reported by: Joshua Rogers (Opera)</p>
+          </li>
+          <li>
+            <p>Obsolete pcre: Prevent invalid memory accesses with an invalid pattern passed to pcre_compile(). Note
+            that the obsolete pcre code is scheduled to be removed before the 3.0.33 release. There has been a warning
+            since since 2008 already. Commit 28512e5b624. OVE-20210222-0001. Reported by: Joshua Rogers (Opera)</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Bug fixes:</p>
+        <ul>
+          <li>
+            <p>Properly parse the client-tag-lifetime directive. Previously it was not accepted as an obsolete hash
+            value was being used. Reported by: Joshua Rogers (Opera)</p>
+          </li>
+          <li>
+            <p>decompress_iob(): Prevent reading of uninitialized data. Reported by: Joshua Rogers (Opera).</p>
+          </li>
+          <li>
+            <p>decompress_iob(): Don't advance cur past eod when looking for the end of the file name and comment.</p>
+          </li>
+          <li>
+            <p>decompress_iob(): Cast value to unsigned char before shifting. Prevents a left-shift of a negative value
+            which is undefined behaviour. Reported by: Joshua Rogers (Opera)</p>
+          </li>
+          <li>
+            <p>gif_deanimate(): Confirm that that we have enough data before doing any work. Fixes a crash when fuzzing
+            with an empty document. Reported by: Joshua Rogers (Opera).</p>
+          </li>
+          <li>
+            <p>buf_copy(): Fail if there's no data to write or nothing to do. Prevents undefined behaviour "applying
+            zero offset to null pointer". Reported by: Joshua Rogers (Opera)</p>
+          </li>
+          <li>
+            <p>log_error(): Treat LOG_LEVEL_FATAL as fatal even when --stfu is being used while fuzzing. Reported by:
+            Joshua Rogers (Opera).</p>
+          </li>
+          <li>
+            <p>Respect DESTDIR when considering whether or not to install config files with ".new" extension.</p>
+          </li>
+          <li>
+            <p>OpenSSL ssl_store_cert(): Fix two error messages.</p>
+          </li>
+          <li>
+            <p>Fix a couple of format specifiers.</p>
+          </li>
+          <li>
+            <p>Silence compiler warnings when compiling with NDEBUG.</p>
+          </li>
+          <li>
+            <p>fuzz_server_header(): Fix compiler warning.</p>
+          </li>
+          <li>
+            <p>fuzz_client_header(): Fix compiler warning.</p>
+          </li>
+          <li>
+            <p>cgi_send_user_manual(): Also reject requests if the user-manual directive specifies a https:// URL.
+            Previously Privoxy would try and fail to open a local file.</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>General improvements:</p>
+        <ul>
+          <li>
+            <p>Log the TLS version and the the cipher when debug 2 is enabled..</p>
+          </li>
+          <li>
+            <p>ssl_send_certificate_error(): Respect HEAD requests by not sending a body.</p>
+          </li>
+          <li>
+            <p>ssl_send_certificate_error(): End the body with a single new line.</p>
+          </li>
+          <li>
+            <p>serve(): Increase the chances that the host is logged when closing a server socket.</p>
+          </li>
+          <li>
+            <p>handle_established_connection(): Add parentheses to clarify an expression Suggested by: David
+            Binderman</p>
+          </li>
+          <li>
+            <p>continue_https_chat(): Explicitly unset CSP_FLAG_CLIENT_CONNECTION_KEEP_ALIVE if
+            process_encrypted_request() fails. This makes it more obvious that the connection will not be reused.
+            Previously serve() relied on CSP_FLAG_SERVER_CONTENT_LENGTH_SET and CSP_FLAG_CHUNKED being unset. Inspired
+            by a patch from Joshua Rogers (Opera).</p>
+          </li>
+          <li>
+            <p>decompress_iob(): Add periods to a couple of log messages</p>
+          </li>
+          <li>
+            <p>Terminate the body of the HTTP snipplets with a single new line instead of "\r\n".</p>
+          </li>
+          <li>
+            <p>configure: Add --with-assertions option and only enable assertions when it is used</p>
+          </li>
+          <li>
+            <p>windows build: Use --with-brotli and --with-mbedtls by default and enable dynamic error checking.</p>
+          </li>
+          <li>
+            <p>gif_deanimate(): Confirm we've got an image before trying to write it Saves a pointless buf_copy()
+            call.</p>
+          </li>
+          <li>
+            <p>OpenSSL ssl_store_cert(): Remove a superfluous space before the serial number.</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Action file improvements:</p>
+        <ul>
+          <li>
+            <p>Disable fast-redirects for .golem.de/</p>
+          </li>
+          <li>
+            <p>Unblock requests to adri*.</p>
+          </li>
+          <li>
+            <p>Block requests for trc*.taboola.com/</p>
+          </li>
+          <li>
+            <p>Disable fast-redirects for .linkedin.com/</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Filter file improvements:</p>
+        <ul>
+          <li>
+            <p>Make the second pcrs job of the img-reorder filter greedy again. The ungreedy version broke the img tags
+            on: https://bulk.fefe.de/scalability/.</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Privoxy-Log-Parser:</p>
+        <ul>
+          <li>
+            <p>Highlight a few more messages.</p>
+          </li>
+          <li>
+            <p>Clarify the --statistics output. The shown "Reused connections" are server connections so name them
+            appropriately.</p>
+          </li>
+          <li>
+            <p>Bump version to 0.9.3.</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Privoxy-Regression-Test:</p>
+        <ul>
+          <li>
+            <p>Add the --check-bad-ssl option to the --help output.</p>
+          </li>
+          <li>
+            <p>Bump version to 0.7.3.</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Documentation:</p>
+        <ul>
+          <li>
+            <p>Add pushing the created tag to the release steps in the developer manual.</p>
+          </li>
+          <li>
+            <p>Clarify that 'debug 32768' should be used in addition to the other debug directives when reporting
+            problems.</p>
+          </li>
+          <li>
+            <p>Add a 'Third-party licenses and copyrights' section to the user manual.</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <div class="SECT2">
+      <h2 class="SECT2"><a name="UPGRADERSNOTE" id="UPGRADERSNOTE">3.1. Note to Upgraders</a></h2>
+      <p>A quick list of things to be aware of before upgrading from earlier versions of <span class=
+      "APPLICATION">Privoxy</span>:</p>
+      <ul>
+        <li>
+          <p>The recommended way to upgrade <span class="APPLICATION">Privoxy</span> is to backup your old
+          configuration files, install the new ones, verify that <span class="APPLICATION">Privoxy</span> is working
+          correctly and finally merge back your changes using <span class="APPLICATION">diff</span> and maybe
+          <span class="APPLICATION">patch</span>.</p>
+          <p>There are a number of new features in each <span class="APPLICATION">Privoxy</span> release and most of
+          them have to be explicitly enabled in the configuration files. Old configuration files obviously don't do
+          that and due to syntax changes using old configuration files with a new <span class=
+          "APPLICATION">Privoxy</span> isn't always possible anyway.</p>
+        </li>
+        <li>
+          <p>Note that some installers remove earlier versions completely, including configuration files, therefore you
+          should really save any important configuration files!</p>
+        </li>
+        <li>
+          <p>On the other hand, other installers don't overwrite existing configuration files, thinking you will want
+          to do that yourself.</p>
+        </li>
+        <li>
+          <p>In the default configuration only fatal errors are logged now. You can change that in the <a href=
+          "config.html#DEBUG">debug section</a> of the configuration file. You may also want to enable more verbose
+          logging until you verified that the new <span class="APPLICATION">Privoxy</span> version is working as
+          expected.</p>
+        </li>
+        <li>
+          <p>Three other config file settings are now off by default: <a href=
+          "config.html#ENABLE-REMOTE-TOGGLE">enable-remote-toggle</a>, <a href=
+          "config.html#ENABLE-REMOTE-HTTP-TOGGLE">enable-remote-http-toggle</a>, and <a href=
+          "config.html#ENABLE-EDIT-ACTIONS">enable-edit-actions</a>. If you use or want these, you will need to
+          explicitly enable them, and be aware of the security issues involved.</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="NAVFOOTER">
+    <hr align="left" width="100%">
+    <table summary="Footer navigation table" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="33%" align="left" valign="top"><a href="installation.html" accesskey="P">Prev</a></td>
+        <td width="34%" align="center" valign="top"><a href="index.html" accesskey="H">Home</a></td>
+        <td width="33%" align="right" valign="top"><a href="quickstart.html" accesskey="N">Next</a></td>
+      </tr>
+      <tr>
+        <td width="33%" align="left" valign="top">Installation</td>
+        <td width="34%" align="center" valign="top">&nbsp;</td>
+        <td width="33%" align="right" valign="top">Quickstart to Using Privoxy</td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
